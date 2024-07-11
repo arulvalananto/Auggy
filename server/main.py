@@ -1,4 +1,5 @@
 from typing import Union
+from langchain_community.llms import Ollama
 
 from fastapi import FastAPI
 
@@ -9,7 +10,10 @@ app = FastAPI()
 def read_root():
     return {"Hello": "World"}
 
+@app.post("/chat")
+def chat():
+    llm = Ollama(
+        model="llama3"
+    )  # assuming you have Ollama installed and have llama3 model pulled with `ollama pull llama3 `
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
+    return llm.invoke("Tell me a joke")
