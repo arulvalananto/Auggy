@@ -4,7 +4,7 @@ __pycache__/
 .hg/
 .svn/
 .tox/
-.venv/
+venv/
 site-packages/
 .idea/
 node_modules/
