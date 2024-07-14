@@ -11,6 +11,7 @@ def generate_JSON_formatter_template():
     """
     return template
 
+
 def generate_correction_template():
     template = """Act as a spelling corrector and improver. Reply to each message only with the rewritten text
 

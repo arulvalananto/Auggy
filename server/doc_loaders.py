@@ -3,9 +3,9 @@ from langchain_community.document_loaders import NotionDBLoader
 
 
 def notion_db_loader():
-    NOTION_TOKEN = os.environ['NOTION_AUTH_SECRET']
-    DATABASE_ID = os.environ['NOTION_DATABASE_ID']
-    
+    NOTION_TOKEN = os.environ["NOTION_AUTH_SECRET"]
+    DATABASE_ID = os.environ["NOTION_DATABASE_ID"]
+
     # create a loader
     loader = NotionDBLoader(
         integration_token=NOTION_TOKEN,
