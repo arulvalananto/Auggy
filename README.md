@@ -27,3 +27,11 @@ source .venv/Scripts/activate
 
 To set up an auto-formatter for your Python code, you can watch this video tutorial: [Watch this video](https://www.youtube.com/watch?v=QU3lxjJ0Kbo&ab_channel=Carberra)
 
+
+## Updating Requirements
+
+Whenever you have updated the package in the FastAPI project, run the following command:
+
+```bash
+pip freeze > requirements.txt
+```
