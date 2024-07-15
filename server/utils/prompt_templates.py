@@ -9,20 +9,34 @@ class PromptTemplatesGenerator:
         If the user input does not follow a recognizable command format or if app_name, project_name, and action_type cannot be identified, set the respective fields to null.
 
         Only return the JSON format. Do not provide any additional context or explanation.
-        
-        Question: {question}    
+                
+        Question: {query}    
         """
         return template
 
     @staticmethod
     def improve_query():
-        template = """Act as a spelling corrector and improver. Reply to each message only with the rewritten text
+        template = """Serve as a spelling corrector and editor. Respond to each message solely with the revised text, adhering strictly to these guidelines:
+        - Ensure accurate spelling, grammar, and punctuation.
+        - Always retain the original language of the text.
+        - Avoid using quotation marks around the revised text.
+        - Exclude the following words from formatting adjustments: paddyfield, slack, gretyHR
+        
+        Output only the revised text. Do not provide any additional context or explanation.
+        Question: {query}
+        """
+        return template
 
-        Strictly follow these rules:
-        - Correct spelling, grammar and punctuation
-        - ALWAYS detect and maintain the original language of the text
-        - NEVER surround the rewritten text with quotes
-
-        Question: {question}
+    def classify_query():
+        template = """
+        You are a text classifier. Your task is to classify the given user input into one of the following categories:
+        
+        app: if the user input is related to actions involving applications such as Paddyfield, greytHR, Google Calendar, Slack, Google Meet, Gmail, etc.
+        query: It should be a question not an action. if the user input is a query or question related to company policies such as leave, reimbursement, HR, over-time, health, rules, and regulations.
+        task: if the user input is related to image generation, text generation, or code generation.
+        other: if the user input does not fit into any of the above categories.
+        
+        Output only the category and the reason for the classification. Do not provide any additional context or explanation.
+        Question: {query}
         """
         return template

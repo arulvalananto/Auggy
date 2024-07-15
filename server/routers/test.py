@@ -11,7 +11,7 @@ from langchain_community.document_loaders import WebBaseLoader
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from utils.models import Question
+from models import Question
 from utils.llm_models import LanguageModels
 from utils.doc_loaders import DocumentLoaders
 from utils.prompt_templates import PromptTemplatesGenerator
@@ -87,7 +87,7 @@ def index_doc():
 
 @router.post("/json_formatter_prompt")
 def prompt_template(payload: Question):
-    question = payload.question
+    question = payload.query
 
     # prompt templates
     correction_template = PromptTemplatesGenerator.improve_query()

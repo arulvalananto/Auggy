@@ -2,4 +2,8 @@ from pydantic import BaseModel
 
 
 class Question(BaseModel):
-    question: str
+    query: str
+
+class Classification(BaseModel):
+    category: str
+    reason: str
