@@ -11,12 +11,9 @@ from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 from models import Question
-from llm_models import ollama_gemma2
-from doc_loaders import notion_db_loader
-from prompt_templates import (
-    generate_correction_template,
-    generate_JSON_formatter_template,
-)
+from llm_models import LanguageModels
+from doc_loaders import DocumentLoaders
+from prompt_templates import PromptTemplatesGenerator
 
 
 load_dotenv()
@@ -38,7 +35,7 @@ def chat():
     An endpoint that uses an LLM (Large Language Model) to generate a response
     to "Tell me a joke".
     """
-    llm = ollama_gemma2()
+    llm = LanguageModels.ollama_gemma2()
     return llm.invoke("Tell me a joke")
 
 
@@ -48,7 +45,7 @@ def notion_doc_loader():
     An endpoint that loads documents from a Notion database using a custom
     loader.
     """
-    loader = notion_db_loader()
+    loader = DocumentLoaders.notion_db_loader()
     docs = loader.load()
     return docs
 
@@ -80,7 +77,7 @@ def index_doc():
     prompt = hub.pull("rlm/rag-prompt")
 
     # LLM
-    llm = ollama_gemma2()
+    llm = LanguageModels.ollama_gemma2()
 
     # Post-processing
     def format_docs(docs):
@@ -99,27 +96,40 @@ def index_doc():
 
 
 @app.post("/json_formatter_prompt")
-def prompt_template(question_payload: Question):
-    question = question_payload.question
+def prompt_template(payload: Question):
+    question = payload.question
 
     # prompt templates
-    correction_template = generate_correction_template()
-    json_format_template = generate_JSON_formatter_template()
+    correction_template = PromptTemplatesGenerator.improve_query()
+    app_finder_template = PromptTemplatesGenerator.app_and_action_finder()
 
     # Prompt construction
     correction_prompt = ChatPromptTemplate.from_template(correction_template)
-    json_format_prompt = ChatPromptTemplate.from_template(json_format_template)
+    app_finder_prompt = ChatPromptTemplate.from_template(app_finder_template)
 
     # LLM
-    llm = ollama_gemma2()
+    llm = LanguageModels.ollama_llama3()
 
     # chains
     correct_chain = correction_prompt | llm | StrOutputParser()
-    format_chain = json_format_prompt | llm | StrOutputParser()
+    finder_chain = app_finder_prompt | llm | StrOutputParser()
 
     # combine chains
-    rag_chains = correct_chain | format_chain
+    rag_chains = correct_chain | finder_chain
 
     # invoke
     answer = rag_chains.invoke({"question": question})
-    return {"question": question, "answer": json.loads(answer)}
+    print(f"answer: {answer}")
+    formatted_answer = json.loads(answer)
+    print(f"formatted answer: {formatted_answer}")
+    return {"question": question, "answer": formatted_answer}
+
+
+@app.post("/chat_prompt")
+def chat_prompt(payload: Question):
+    question = payload.question
+
+    # format question
+    prompt = ChatPromptTemplate.from_template(
+        Prompt_Templates_Generator.improve_query()
+    )
