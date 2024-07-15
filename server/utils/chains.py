@@ -1,3 +1,4 @@
+from langchain import hub
 from langchain.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_core.output_parsers import StrOutputParser, JsonOutputParser
 
@@ -20,10 +21,7 @@ class Chain:
         # format chain
         chain = prompt | llm | StrOutputParser()
 
-        # invoke
-        formatted_user_query = chain.invoke({"query": query})
-
-        return formatted_user_query
+        return chain.invoke({"query": query})
 
     @staticmethod
     def classify_query(query: str) -> str:
@@ -66,3 +64,16 @@ class Chain:
         )
 
         return classification
+
+    @staticmethod
+    def funny_reply(query: str) -> str:
+        # format question prompt
+        prompt = hub.pull("sredeemer/joke")
+
+        # LLM
+        llm = LanguageModels.ollama_llama3()
+
+        # format chain
+        chain = prompt | llm | StrOutputParser()
+
+        return chain.invoke({"question": query})

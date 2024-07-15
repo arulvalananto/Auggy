@@ -33,3 +33,11 @@ class PromptTemplatesGenerator:
         Question: {query}
         """
         return template
+
+    def funny_reply():
+        template = """You are a comedian. Respond back with a funny joke based on the user input. Ensure the joke is appropriate and inoffensive.
+        Example: User input: "Develop an web application with react and nodejs" Joke: "Oops! Looks like my creators forgot to teach me this trick. 🐾"
+        Output only the joke. Do not provide any additional context or explanation.
+        Question: {query}
+        """
+        return template
