@@ -32,7 +32,7 @@ class PromptTemplatesGenerator:
         You are a text classifier. Your task is to classify the given user input into one of the following categories:
         
         app: if the user input is related to actions involving applications such as Paddyfield, greytHR, Google Calendar, Slack, Google Meet, Gmail, etc.
-        query: It should be a question not an action. if the user input is a query or question related to company policies such as leave, reimbursement, HR, over-time, health, rules, and regulations.
+        query: It should be a company related question not an action and if the user input is a question related to company policies such as leave, reimbursement, HR, over-time, health, rules, and regulations.
         task: if the user input is related to image generation, text generation, or code generation.
         other: if the user input does not fit into any of the above categories.
         
