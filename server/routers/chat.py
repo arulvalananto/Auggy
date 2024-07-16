@@ -1,7 +1,5 @@
+from enums import Category
 from fastapi import APIRouter
-from langchain_community.vectorstores import Chroma
-from langchain_huggingface.embeddings import HuggingFaceEmbeddings
-
 from models import Question
 from utils.chains import Chain
 from utils.rag import RAG
@@ -20,13 +18,13 @@ def chat_prompt(payload: Question):
     classification = Chain.classify_query(query)
     response = None
 
-    if classification["category"].lower() == "app":
+    if classification["category"].lower() == Category.APP.value:
         # perform app related tasks here.
         print("app")
-    elif classification["category"].lower() == "query":
+    elif classification["category"].lower() == Category.QUERY.value:
         # perform query related tasks here.
         response = RAG.search_documents(question)
-    elif classification["category"].lower() == "task":
+    elif classification["category"].lower() == Category.TASK.value:
         # perform task like image generation and text generation here.
         print("task")
     else:

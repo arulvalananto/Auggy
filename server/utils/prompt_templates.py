@@ -25,7 +25,7 @@ class PromptTemplatesGenerator:
     def classify_query():
         template = """You are a text classifier. Your task is to classify the given user input into one of the following categories:
         app: if the user input is related to actions involving applications such as [{apps}].
-        query: It should be a company related question not an action and if the user input is a question related to company policies such as [{policies}].
+        query: It should be a company related and langchain question not an action and if the user input is a question related to company policies such as [{policies}] and langchain.
         task: if the user input is related to tasks such as [{tasks}].
         other: if the user input does not fit into any of the above categories.
         Output only the category and the reason for the classification. Do not provide any additional context or explanation.

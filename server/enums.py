@@ -1,5 +1,8 @@
-class CategoryEnum(str):
-    app = "app"
-    other = "other"
-    query = "query"
-    task = "task"
+from enum import Enum
+
+
+class Category(Enum):
+    APP = "app"
+    QUERY = "query"
+    TASK = "task"
+    OTHER = "other"

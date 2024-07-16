@@ -1,6 +1,4 @@
 from pydantic import BaseModel, Field
-from enums import CategoryEnum
-
 
 class Question(BaseModel):
     query: str

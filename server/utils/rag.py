@@ -1,13 +1,11 @@
 import os
-import shutil
 
 from langchain import hub
+from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import Chroma
 from langchain_core.output_parsers import StrOutputParser
-from langchain_community.document_loaders import WebBaseLoader
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
 from utils.llm_models import LanguageModels
 
 
@@ -15,7 +13,7 @@ class RAG:
     @staticmethod
     def load_documents():
         if os.path.exists("./chroma_db"):
-            shutil.rmtree("./chroma_db")
+            return
 
         links = [
             "https://medium.com/munchy-bytes/exploring-langchain-ff13fff63340",
@@ -42,7 +40,7 @@ class RAG:
             documents=splits,
         )
 
-        return docs
+        return db
 
     @staticmethod
     def search_documents(query):
@@ -69,4 +67,4 @@ class RAG:
 
         answer = chain.invoke({"context": format_docs(docs), "question": query})
 
-        return answer
+        return {"collected_docs": len(docs), "answer": answer}
