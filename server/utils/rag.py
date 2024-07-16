@@ -1,4 +1,5 @@
 import os
+import pprint
 
 from langchain import hub
 from langchain_community.document_loaders import WebBaseLoader
@@ -67,4 +68,14 @@ class RAG:
 
         answer = chain.invoke({"context": format_docs(docs), "question": query})
 
-        return {"collected_docs": len(docs), "answer": answer}
+        return {
+            "collected_docs": len(docs),
+            "answer": answer,
+            "sources": [
+                {
+                    "description": doc.metadata["description"],
+                    "source": doc.metadata["source"],
+                }
+                for doc in docs
+            ],
+        }
