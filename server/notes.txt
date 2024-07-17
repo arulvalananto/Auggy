@@ -1,8 +1,4 @@
 Developer Notes
 
-* Redirect all unknown questions to query agent.
 * Develop some basic action with app agent like JSONFormatter for apps based on given prompt.
-* Add Double-checker for query agent to make sure the agent respond with proper answer.
-    - If yes, send it back to user.
-    - If not, send a funny message back to user based on user's prompt.
-* Remove other agent flow.
+

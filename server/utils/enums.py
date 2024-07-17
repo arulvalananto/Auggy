@@ -3,6 +3,14 @@ from enum import Enum
 
 class Category(Enum):
     APP = "app"
-    QUERY = "query"
     TASK = "task"
-    OTHER = "other"
+    QUERY = "query"
+
+
+class Valid(Enum):
+    YES = "yes"
+    NO = "no"
+
+
+class Apps(Enum):
+    PADDY_FIELD = "paddyfield"

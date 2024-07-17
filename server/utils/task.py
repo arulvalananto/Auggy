@@ -9,7 +9,7 @@ from langchain.prompts import ChatPromptTemplate
 
 class Task:
     @staticmethod
-    def generate_response(question: str) -> str:
+    def process(question: str) -> str:
         # prompt
         # https://smith.langchain.com/hub/shreyshah/llm_agent
         prompt = ChatPromptTemplate.from_template(
@@ -22,4 +22,4 @@ class Task:
         # format chain
         chain = prompt | llm | StrOutputParser()
 
-        return chain.invoke({"query": question})
+        return chain.invoke({"question": question})

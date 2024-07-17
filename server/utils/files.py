@@ -3,7 +3,11 @@ import uuid
 from typing import List
 
 from fastapi import UploadFile
-from langchain_community.document_loaders import BSHTMLLoader, PyPDFLoader, TextLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
+from langchain_community.vectorstores import Chroma
+from langchain_huggingface.embeddings import HuggingFaceEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from utils.chains import Chain
 
 
 class Files:
@@ -39,13 +43,30 @@ class Files:
         return docs
 
     @staticmethod
-    def perform_action(question: str, files: List[UploadFile]):
+    def process(question: str, files: List[UploadFile]):
         # Perform load docs based on the file type
         docs = Files.load_docs(files)
 
         print(f"Docs loaded: {docs}")
 
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
+        splits = text_splitter.split_documents(docs)
+        print(f"Split {len(splits)} documents")
+
+        db = Chroma.from_documents(
+            embedding=HuggingFaceEmbeddings(),
+            persist_directory="./chroma_db",
+            collection_name=f"{uuid.uuid4()}_file_upload",
+            documents=splits,
+        )
+
+        context = db.similarity_search(question)
+
+        file_handler_chain = Chain.file_handler()
+
+        answer = file_handler_chain.invoke({"context": context, "question": question})
+        print(answer)
+
         return {
-            "files": [file.filename for file in files],
-            "message": "Files uploaded successfully.",
+            "answer": answer
         }

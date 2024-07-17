@@ -1,26 +1,28 @@
 from typing import List, Union
 
 from fastapi import UploadFile
-from models import Classification
-from utils.apps import Apps
-from utils.chains import Chain
-from utils.rag import RAG
-from utils.task import Task
+from models.common import Classification
+from utils.integration import Integration
 from utils.enums import Category
 from utils.files import Files
+from utils.query import Query
+from utils.task import Task
 
 
 class LogicalRoute:
     @staticmethod
-    def classification_route(question: str, classification: Classification, files: Union[List[UploadFile] | None]):
+    def classification_route(
+        question: str,
+        classification: Classification,
+        files: Union[List[UploadFile] | None],
+    ):
         if files is not None:
-            return Files.perform_action(question, files)
-        else:        
+            return Files.process(question, files)
+        else:
+            # check the category of the classification
             if Category.APP.value in classification["category"].lower():
-                return Apps.find_app_and_action_type(question)
-            elif Category.QUERY.value in classification["category"].lower():
-                return RAG.search_documents(question)
+                return Integration.process(question, classification)
             elif Category.TASK.value in classification["category"].lower():
-                return Task.generate_response(question)
+                return Task.process(question)
             else:
-                return Chain.funny_reply(question)
+                return Query.process(question)

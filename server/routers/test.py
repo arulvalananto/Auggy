@@ -1,19 +1,17 @@
 import json
 
 from fastapi import APIRouter
-
 from langchain import hub
 from langchain.prompts import ChatPromptTemplate
-from langchain_community.vectorstores import Chroma
-from langchain_core.runnables import RunnablePassthrough
-from langchain_core.output_parsers import StrOutputParser
 from langchain_community.document_loaders import WebBaseLoader
+from langchain_community.vectorstores import Chroma
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.runnables import RunnablePassthrough
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-
-from models import Question
-from utils.llm_models import LanguageModels
+from models.common import Question
 from utils.doc_loaders import DocumentLoaders
+from utils.llm_models import LanguageModels
 from utils.prompt_templates import PromptTemplatesGenerator
 
 router = APIRouter(prefix="/basic", tags=["basic"])

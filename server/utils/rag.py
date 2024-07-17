@@ -1,13 +1,10 @@
 import os
-import pprint
 
 from langchain import hub
 from langchain_community.document_loaders import WebBaseLoader
 from langchain_community.vectorstores import Chroma
-from langchain_core.output_parsers import StrOutputParser
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from utils.llm_models import LanguageModels
 
 
 class RAG:
@@ -50,32 +47,7 @@ class RAG:
             collection_name="langchain",
             embedding_function=HuggingFaceEmbeddings(),
         )
+
         docs = db.similarity_search(query)
 
-        # prompt
-        # https://smith.langchain.com/hub/rlm/rag-prompt
-        prompt = hub.pull("rlm/rag-prompt")
-
-        # LLM
-        llm = LanguageModels.ollama_llama3()
-
-        # format chain
-        chain = prompt | llm | StrOutputParser()
-
-        # Post-processing
-        def format_docs(docs):
-            return "\n\n".join(doc.page_content for doc in docs)
-
-        answer = chain.invoke({"context": format_docs(docs), "question": query})
-
-        return {
-            "collected_docs": len(docs),
-            "answer": answer,
-            "sources": [
-                {
-                    "description": doc.metadata["description"],
-                    "source": doc.metadata["source"],
-                }
-                for doc in docs
-            ],
-        }
+        return docs
